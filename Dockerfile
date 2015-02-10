@@ -25,7 +25,7 @@ ENV CLOUDWATT https://storage.fr1.cloudwatt.com/v1/AUTH_f462168636b34441ac49c9db
 ENV ASPERA aspera
 ENV ASPERADIR /opt/$ASPERA
 ENV ASPERAPKG aspera-server.deb
-ENV ASPERALIC aspera-server.lic
+ENV ASPERALIC aspera-license
 
 RUN mkdir -p $ASPERADIR ; cd $ASPERADIR
 ADD $CLOUDWATT/ASPERA/$ASPERAPKG $ASPERADIR/
@@ -33,7 +33,6 @@ CMD dpkg -i $ASPERADIR/$ASPERAPKG
 
 RUN mkdir -p $ASPERADIR/etc ; cd $ASPERADIR/etc
 ADD $CLOUDWATT/ASPERA/$ASPERALIC $ASPERADIR/etc
-RUN ln -s $ASPERALIC aspera-license
 RUN ascp -A
 
 
