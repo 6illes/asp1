@@ -18,6 +18,27 @@ RUN export LANGUAGE=en_US.UTF-8 && \
 # Added prerequisites
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y openssh-server apache2 mysql-server
 
+
+# ASPERA
+ENV CLOUDWATT https://storage.fr1.cloudwatt.com/v1/AUTH_f462168636b34441ac49c9dbf6d9f57d
+
+ENV ASPERA aspera
+ENV ASPERADIR /opt/${ASPERA}
+ENV ASPERAPKG aspera-server.deb
+ENV ASPERALIC aspera-server.lic
+
+CMD mkdir ${ASPERADIR}
+CMD mkdir ${ASPERADIR}/etc
+CMD cd ${ASPERADIR}
+
+#ADD ${CLOUDWATT}/ASPERA/${ASPERAPKG} ${ASPERADIR}/
+#ADD ${CLOUDWATT}/ASPERA/${ASPERALIC} ${ASPERADIR}/
+#CMD dpkg -i ${ASPERADIR}/${ASPERAPKG} 
+
+#RUN ascp -A
+
+
+
 # Let's set the default timezone in both cli and apache configs
 #RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ Europe\/Stockholm/g' /etc/php5/cli/php.ini
 #RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ Europe\/Stockholm/g' /etc/php5/apache2/php.ini
