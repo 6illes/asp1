@@ -1,14 +1,15 @@
 FROM debian
 MAINTAINER Gilles
 RUN apt-get update && apt-get upgrade -y && apt-get install -y nano openssh-server apache2 mysql-server
-ENV ASPERA aspera
-CMD mkdir /opt/${ASPERA}
-CMD mkdir /opt/${ASPERA}/etc
-CMD cd /opt/${ASPERA}
 ENV CLOUDWATT https://storage.fr1.cloudwatt.com/v1/AUTH_f462168636b34441ac49c9dbf6d9f57d
+ENV ASPERA aspera
+ENV ASPERADIR /opt/${ASPERA}
 ENV ASPERAPKG aspera-server.deb
 ENV ASPERALIC aspera-server.lic
-ADD ${CLOUDWATT}/ASPERA/${ASPERAPKG} /opt/${ASPERA}/
-ADD ${CLOUDWATT}/ASPERA/${ASPERALIC} /opt/${ASPERA}/
-CMD dpkg -i /opt/${ASPERAPKG} 
+CMD mkdir ${ASPERADIR}
+CMD mkdir ${ASPERADIR}/etc
+CMD cd ${ASPERADIR}
+ADD ${CLOUDWATT}/ASPERA/${ASPERAPKG} ${ASPERADIR}/
+ADD ${CLOUDWATT}/ASPERA/${ASPERALIC} ${ASPERADIR}/
+CMD dpkg -i ${ASPERADIR}/${ASPERAPKG} 
 RUN ascp -A
