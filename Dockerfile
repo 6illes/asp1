@@ -20,22 +20,27 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y openssh-server apache2 mys
 
 
 # ASPERA
-ENV CLOUDWATT https://storage.fr1.cloudwatt.com/v1/AUTH_f462168636b34441ac49c9dbf6d9f57d
 
 ENV ASPERA aspera
 ENV ASPERADIR /opt/$ASPERA
+
+ENV ASPERAURL https://storage.fr1.cloudwatt.com/v1/AUTH_f462168636b34441ac49c9dbf6d9f57d/ASPERA
 ENV ASPERAPKG aspera-server.deb
 ENV ASPERALIC aspera-license
 
-RUN mkdir -p $ASPERADIR ; cd $ASPERADIR
-ADD $CLOUDWATT/ASPERA/$ASPERAPKG $ASPERADIR/
-CMD dpkg -i $ASPERADIR/$ASPERAPKG 
+RUN mkdir -p $ASPERADIR
+RUN mkdir -p $ASPERADIR/etc
 
-RUN mkdir -p $ASPERADIR/etc ; cd $ASPERADIR/etc
-ADD $CLOUDWATT/ASPERA/$ASPERALIC $ASPERADIR/etc
+ADD $ASPERAURL/$ASPERAPKG $ASPERADIR/$ASPERAPKG
+ADD $ASPERAURL/$ASPERALIC $ASPERADIR/etc/$ASPERALIC
+
+WORKDIR $ASPERADIR
+RUN dpkg -i $ASPERAPKG 
+
+WORKDIR $ASPERADIR/etc
 RUN ascp -A
 
-
+RUN echo ------------ ASPERA CONNECT SERVER ------------
 
 # Let's set the default timezone in both cli and apache configs
 #RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ Europe\/Stockholm/g' /etc/php5/cli/php.ini
